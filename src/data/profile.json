@@ -1,0 +1,40 @@
+{
+  "name": "Aziz Falah Hassan",
+  "handle": "Aziz-AXG",
+  "title": "Web Developer",
+  "headline": "Node.js, Next.js, and Expo specialist building sharp web, mobile, automation, and utility systems from Baghdad.",
+  "location": "Baghdad, Iraq",
+  "timezone": "UTC +03:00",
+  "email": "azeezfalah200@gmail.com",
+  "github": "https://github.com/Aziz-AXG",
+  "phone": "+964 7727577674",
+  "whatsapp": "+964 7727577674",
+  "whatsappLink": "https://wa.me/9647727577674",
+  "specialties": [
+    "Node.js",
+    "Next.js",
+    "Expo",
+    "React Native",
+    "TypeScript",
+    "Bun",
+    "Express.js / Hono",
+    "Drizzle ORM",
+    "Docker"
+  ],
+  "socials": [
+    {
+      "label": "GitHub",
+      "url": "https://github.com/Aziz-AXG"
+    },
+    {
+      "label": "LinkedIn",
+      "url": "https://www.linkedin.com/in/aziz-falah"
+    }
+  ],
+  "statusLines": [
+    "currently learning Cloudflare Workers and TanStack Start",
+    "ask me about React and Node",
+    "love learning programming technology"
+  ],
+  "availability": "Open to web, mobile, automation, and full-stack projects."
+}
