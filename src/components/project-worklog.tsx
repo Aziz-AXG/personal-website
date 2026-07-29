@@ -151,7 +151,7 @@ export function ProjectWorklog({ projects }: { projects: Project[] }) {
                   read full log
                 </button>
                 <div className="project-tech-list flex flex-wrap gap-2">
-                  {project.technologies.slice(0, 6).map((tech) => (
+                  {project.technologies.map((tech) => (
                     <span className="tech-chip" key={tech}>
                       {tech}
                     </span>

@@ -980,4 +980,10 @@ a.contact-link:hover {
     justify-content: flex-start;
     order: -1;
   }
+
+  .project-tech-list {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    padding-bottom: 0.3rem;
+  }
 }
