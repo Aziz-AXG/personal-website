@@ -1,7 +1,8 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
+  BookOpenText,
   CalendarDays,
   ExternalLink,
   Filter,
@@ -11,6 +12,7 @@ import {
   RotateCcw,
   SortAsc,
   SortDesc,
+  X,
 } from "lucide-react";
 
 export type Project = {
@@ -39,15 +41,12 @@ function formatDate(value: string) {
   }).format(new Date(value));
 }
 
-function shortSummary(text: string) {
-  if (text.length <= 230) return text;
-  return `${text.slice(0, 227).trim()}...`;
-}
-
 export function ProjectWorklog({ projects }: { projects: Project[] }) {
   const [filter, setFilter] = useState("All");
   const [direction, setDirection] = useState<"desc" | "asc">("desc");
   const [visibleCount, setVisibleCount] = useState(pageSize);
+  const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+  const dialogRef = useRef<HTMLDialogElement>(null);
 
   const visibleProjects = useMemo(() => {
     return projects
@@ -71,6 +70,16 @@ export function ProjectWorklog({ projects }: { projects: Project[] }) {
     setDirection(direction === "desc" ? "asc" : "desc");
     setVisibleCount(pageSize);
   }
+
+  useEffect(() => {
+    const dialog = dialogRef.current;
+
+    if (selectedProject && dialog && !dialog.open) {
+      dialog.showModal();
+    } else if (!selectedProject && dialog?.open) {
+      dialog.close();
+    }
+  }, [selectedProject]);
 
   return (
     <section id="worklog" className="terminal-frame panel-section p-5 sm:p-6">
@@ -117,7 +126,7 @@ export function ProjectWorklog({ projects }: { projects: Project[] }) {
               <div className="project-index">
                 #{String(index + 1).padStart(2, "0")}
               </div>
-              <div className="min-w-0">
+              <div className="project-card-main min-w-0">
                 <div className="flex flex-wrap items-center gap-2">
                   <h3>{project.name}</h3>
                   {project.featured ? (
@@ -131,10 +140,17 @@ export function ProjectWorklog({ projects }: { projects: Project[] }) {
                   <span>/</span>
                   {project.projectType}
                 </p>
-                <p className="project-summary">
-                  {shortSummary(project.summary)}
-                </p>
-                <div className="mt-3 flex flex-wrap gap-2">
+                <p className="project-summary">{project.summary}</p>
+                <button
+                  className="summary-log-button"
+                  onClick={() => setSelectedProject(project)}
+                  type="button"
+                  aria-label={`Read the full ${project.name} project log`}
+                >
+                  <BookOpenText size={15} aria-hidden="true" />
+                  read full log
+                </button>
+                <div className="project-tech-list flex flex-wrap gap-2">
                   {project.technologies.slice(0, 6).map((tech) => (
                     <span className="tech-chip" key={tech}>
                       {tech}
@@ -199,6 +215,43 @@ export function ProjectWorklog({ projects }: { projects: Project[] }) {
           No project packets matched this filter.
         </div>
       ) : null}
+
+      <dialog
+        aria-labelledby="project-log-title"
+        className="log-dialog"
+        onCancel={() => setSelectedProject(null)}
+        onClick={(event) => {
+          if (event.target === event.currentTarget) {
+            setSelectedProject(null);
+          }
+        }}
+        onClose={() => setSelectedProject(null)}
+        ref={dialogRef}
+      >
+        {selectedProject ? (
+          <div className="log-dialog-shell">
+            <div className="log-dialog-head">
+              <div>
+                <p className="terminal-command">read ./project-log --full</p>
+                <h3 id="project-log-title">{selectedProject.name}</h3>
+              </div>
+              <button
+                aria-label="Close full project log"
+                onClick={() => setSelectedProject(null)}
+                type="button"
+              >
+                <X size={19} />
+              </button>
+            </div>
+            <p className="log-dialog-meta">
+              {formatDate(selectedProject.createdAt)}
+              <span>/</span>
+              {selectedProject.projectType}
+            </p>
+            <p className="log-dialog-summary">{selectedProject.summary}</p>
+          </div>
+        ) : null}
+      </dialog>
     </section>
   );
 }
